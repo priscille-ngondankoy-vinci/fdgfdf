@@ -8,20 +8,28 @@
 #include "utils.h"
 
 int main(int argc, char *argv[]) {
-  int sockfd = ssocket();
-  sconnect(LOCAL_HOST, SERVER_PORT, sockfd);
-  char buffer[BUFFER_SIZE];
-  int nbCharRd = read(1, buffer, BUFFER_SIZE);
-  while (nbCharRd > 0) {
-    int nbCharWr = write(1, bufRd, nbCharRd);
-    checkCond(nbCharWr != nbCharRd,"Error writing stdout");
-    nbCharRd = read(fd, bufRd, BUFFER_SIZE);
-  }
-  checkNeg(nbCharRd,"Error reading file");
+    int sockfd = ssocket();
+    
 
+    char buffer[BUFFER_SIZE];
+    if (argc != 3) {
+        exit(1);
+    }
 
+    int port = atoi(argv[1]);
+    char *ip = argv[2];
+    sconnect(ip, port, sockfd);
 
-  swrite(sockfd,&buffer,sizeof(int));
-  sclose(sockfd);
+    while (1) {
+        ssize_t n = sread(0, buffer, sizeof(buffer) - 1);
+        if (n <= 0) break;
+
+        buffer[n] = '\0';  
+
+        swrite(sockfd, buffer, n);  
+    }
+
+    sclose(sockfd);
     return 0;
 }
+
