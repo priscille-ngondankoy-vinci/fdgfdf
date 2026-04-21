@@ -10,7 +10,7 @@
 int main(int argc, char *argv[]) {
     int sockfd = ssocket();
     
-
+     
     char buffer[BUFFER_SIZE];
     if (argc != 3) {
         exit(1);
@@ -19,6 +19,7 @@ int main(int argc, char *argv[]) {
     int port = atoi(argv[1]);
     char *ip = argv[2];
     sconnect(ip, port, sockfd);
+    printf("Entrez une commande : ");
 
     while (1) {
         ssize_t n = sread(0, buffer, sizeof(buffer) - 1);

