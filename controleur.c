@@ -16,10 +16,13 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
+
     int port = atoi(argv[1]);
     char *ip = argv[2];
+
     sconnect(ip, port, sockfd);
-    printf("Entrez une commande : ");
+
+    printf("Entrez une commande :\n");
 
     while (1) {
         ssize_t n = sread(0, buffer, sizeof(buffer) - 1);
